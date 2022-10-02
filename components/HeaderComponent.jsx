@@ -16,6 +16,7 @@ import {
 } from "@tabler/icons";
 import { MantineLogo } from "@mantine/ds";
 import ColorSchemeToggle from "./ColorSchemeToggle";
+import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -104,7 +105,7 @@ function HeaderComponent({ links }) {
         setActive(link.link);
       }}
     >
-      {link.label}
+      <Link href={link.link}>{link.label}</Link>
     </a>
   ));
 
@@ -124,8 +125,13 @@ function HeaderComponent({ links }) {
         <MantineLogo size={28} />
 
         <Group>
-          <Button variant="default">Log in</Button>
-          <Button>Sign up</Button>
+          <Link href={"/authenticate"}>
+            <Button variant="default">Log in</Button>
+          </Link>
+          <Link href={"/authenticate?signUp=true"}>
+            <Button>Sign up</Button>
+          </Link>
+
           <ColorSchemeToggle />
         </Group>
       </Container>
