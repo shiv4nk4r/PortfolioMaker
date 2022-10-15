@@ -33,12 +33,12 @@ function authenticate() {
   }, []);
 
   return (
-    <div>
+    <React.Fragment>
       <HeaderComponent links={headerLinks} />
       <div className={classes.flexMiddle}>
         <AuthenticationWrapper />
       </div>
-    </div>
+    </React.Fragment>
   );
 }
 

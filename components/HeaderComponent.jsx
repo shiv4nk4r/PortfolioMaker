@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   createStyles,
   Header,
@@ -17,6 +17,7 @@ import {
 import { MantineLogo } from "@mantine/ds";
 import ColorSchemeToggle from "./ColorSchemeToggle";
 import Link from "next/link";
+import { fetchHeaderItems } from "../supabaseProvider/SupabaseClient";
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -88,11 +89,20 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-function HeaderComponent({ links }) {
+function HeaderComponent() {
   const [opened, { toggle }] = useDisclosure(false);
-  const [active, setActive] = useState(links[0].link);
+  const [links, setLinks] = useState([{ label: "Home", link: "/" }]);
+  const [active, setActive] = useState();
   const { classes, cx } = useStyles();
 
+  const getHeaderItems = async () => {
+    let data = await fetchHeaderItems();
+    setLinks(data);
+  };
+
+  useEffect(() => {
+    getHeaderItems();
+  }, []);
   const items = links.map((link) => (
     <a
       key={link.label}
