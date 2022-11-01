@@ -149,7 +149,7 @@ function terminal({ userName }) {
     // }, 2000);
     return (
       <p className={styles.p}>
-        You asked for it....
+        You asked for it...
         <br></br>
         <br></br>
         <div>
