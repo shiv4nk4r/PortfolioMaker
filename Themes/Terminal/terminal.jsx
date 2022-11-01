@@ -3,12 +3,16 @@ import { data } from "../../shivankarSharma";
 import Head from "next/head";
 import Figlet from "../../components/Figlet/Figlet";
 import styles from "./terminal.module.scss";
+import { useRouter } from "next/router";
+import YouTube from "react-youtube";
 
 function terminal({ userName }) {
+  const router = useRouter();
   const inputAreaRef = useRef();
   const [formData, setFormData] = useState(data);
   const [input, setInput] = useState("");
   const [output, setOutput] = useState([]);
+  const [secretUnlock, setSecretUnlock] = useState(false);
   const [commands, setCommands] = useState([
     { name: "whois", desc: `Who is ${userName}` },
     { name: "experience", desc: `Show ${userName}'s experience` },
@@ -16,6 +20,7 @@ function terminal({ userName }) {
     { name: "projects", desc: `Show ${userName}'s projects` },
     { name: "skills", desc: `Show ${userName}'s skills` },
     { name: "contact", desc: `Show ${userName}'s contacts` },
+    { name: "secret", desc: `Do not run this command` },
     { name: "help", desc: `You obviously already know what this does` },
     { name: "banner", desc: `Show banner` },
     { name: "clear", desc: `clear terminal` },
@@ -110,6 +115,18 @@ function terminal({ userName }) {
       case "contact":
         setOutput([...output, comm, showSocial]);
         break;
+      case "secret":
+        setSecretUnlock(true);
+        setOutput([...output, comm, showSecret]);
+        break;
+      case "sudo":
+        if (secretUnlock) {
+          setOutput([...output, comm, showSudo()]);
+        } else {
+          let error = commandNotFound(input);
+          setOutput([...output, comm, error]);
+        }
+        break;
       case "banner":
         setOutput([...output, comm, showBanner]);
         break;
@@ -124,6 +141,29 @@ function terminal({ userName }) {
         setOutput([...output, comm, error]);
         break;
     }
+  };
+
+  const showSudo = () => {
+    // setTimeout(() => {
+    //   window.open("https://youtu.be/dQw4w9WgXcQ?autoplay=1", "_ blank");
+    // }, 2000);
+    return (
+      <p className={styles.p}>
+        You asked for it....
+        <br></br>
+        <br></br>
+        <div>
+          <YouTube
+            videoId="dQw4w9WgXcQ"
+            opts={{
+              playerVars: {
+                autoplay: 1,
+              },
+            }}
+          />
+        </div>
+      </p>
+    );
   };
 
   const showHelp = (
@@ -141,6 +181,12 @@ function terminal({ userName }) {
     <p className={styles.p + " " + styles.color2}>{formData.aboutYou}</p>
   );
 
+  const showSecret = (
+    <p className={styles.p}>
+      type <span className={styles.command}>&apos;sudo&apos;</span> to unlock
+      greatness.
+    </p>
+  );
   const showExperience = (
     <p>
       {formData.experiences.map((item) => (
